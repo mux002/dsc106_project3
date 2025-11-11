@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <title>🔥 Where America Burns: Visualizing Wildfires across the United States</title>
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+    <style>
+        :root{--bg:#0b0e11;--panel:#151a21;--text:#e9eef5;--muted:#9fb0c3;--accent:#ff7a18;--stroke:#2a3340;}
+        body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Inter,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--text);}
+        header{padding:18px 20px;border-bottom:1px solid var(--stroke);background:linear-gradient(180deg,#0d1218,#0a0e12);}
+        h1{margin:0;font-size:20px}
+        .sub{color:var(--muted);font-size:13px;margin-top:6px}
+        .container{display:grid;grid-template-columns:320px 1fr;gap:16px;padding:16px}
+        .panel{background:var(--panel);border:1px solid var(--stroke);border-radius:14px;padding:14px}
+        .panel h2{font-size:14px;margin:2px 0 10px;color:var(--muted);font-weight:600;letter-spacing:.4px;text-transform:uppercase}
+        .controls label{display:block;font-size:12px;color:var(--muted);margin:10px 0 6px}
+        .controls input[type="range"]{width:100%}
+        .toggle-group{display:flex;gap:6px}
+        .toggle-group button{flex:1;padding:8px 10px;border-radius:10px;border:1px solid var(--stroke);background:#10151b;color:var(--text);cursor:pointer}
+        .toggle-group button.active{border-color:var(--accent);background:#20140a}
+        select{width:100%;padding:8px 10px;border-radius:10px;border:1px solid var(--stroke);background:#10151b;color:var(--text)}
+        .legend{display:flex;align-items:center;gap:10px;margin-top:10px}
+        .legend .bar{height:10px;flex:1;border-radius:6px;border:1px solid var(--stroke)}
+        .svg-wrap{background:#0c1016;border:1px solid var(--stroke);border-radius:14px;overflow:hidden}
+        .tooltip{position:fixed;pointer-events:none;background:#0d1117;border:1px solid #2a3340;padding:10px 12px;border-radius:10px;
+                font-size:12px;color:#dfe7f1;box-shadow:0 6px 20px rgba(0,0,0,.35);display:none;z-index:10;max-width:320px}
+        .tooltip .h{font-weight:700;margin-bottom:6px}
+        .foot{font-size:11px;color:var(--muted);margin-top:8px}
+        .anno{fill:#4aa8ff;font-size:11px;text-shadow:0 1px 0 #000}
+    </style>
+</head>
+<body>
+    <header>
+        <h1>🔥 Where America Burns: Visualizing Wildfires across the United States</h1>
+        <div class="sub">Explore monthly wildfire activity by state with year selection, day/night filter, tooltips, and zoom/pan.</div>
+    </header>
+
+    <div class="container">
+        <aside class="panel controls">
+            <h2>Controls</h2>
+
+            <label for="year">Year: <span id="yearLabel"></span></label>
+            <select id="year"></select>
+
+            <label for="month">Month of Year: <span id="monthLabel">1 (Jan)</span></label>
+            <input id="month" type="range" min="1" max="12" step="1" value="7"/>
+
+            <label>Day / Night</label>
+            <div class="toggle-group" id="dnGroup">
+                <button data-dn="A" class="active">All</button>
+                <button data-dn="D">Day</button>
+                <button data-dn="N">Night</button>
+            </div>
+
+            <label for="metric">Metric (fill color)</label>
+            <select id="metric">
+                <option value="count">Detections (count)</option>
+                <option value="avg_brightness">Avg Brightness</option>
+                <option value="median_frp">Median FRP</option>
+            </select>
+
+            <div class="legend">
+                <span id="legendMin">low</span>
+                <div class="bar" id="legendBar"></div>
+                <span id="legendMax">high</span>
+            </div>
+        </aside>
+
+        <main class="panel">
+            <h2>Map</h2>
+            <div class="svg-wrap">
+                <svg id="map" width="960" height="600" role="img" aria-label="US states heat map"></svg>
+            </div>
+            <div class="foot">Hover a state for details. Use the month slider + year dropdown to compare seasonal peaks across years.</div>
+            </main>
+    </div>
+
+    <div class="tooltip" id="tooltip"></div>
+
+    <!-- D3 -->
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <!-- App -->
+    <script src="app.js"></script>
+</body>
+</html>
