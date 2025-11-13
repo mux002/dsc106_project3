@@ -163,7 +163,7 @@ function drawDetailChart(stateName) {
   
     svgD.append("g").attr("transform","translate(0,220)").call(d3.axisBottom(x).ticks(5));
     svgD.append("g").attr("transform","translate(40,0)").call(d3.axisLeft(y).ticks(4));
-    d3.select("#detailTitle").text(`🔥 ${stateName} — Monthly Wildfires`);
+    d3.select("#detailTitle").text(`${stateName} — Monthly Wildfires`);
   }
   
 
