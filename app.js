@@ -118,9 +118,56 @@ Promise.all([
                 <div><b>% Night (month):</b> ${pct(rowA?.pct_night ?? rowDN?.pct_night)}</div>
             `);
         })
-        .on("mouseleave", () => tooltip.style("display","none"));
+        statePath.on("click", (ev, d) => {
+            const stateName = getStateName(d);
+            drawDetailChart(stateName);
+          });
     }
+    
+function drawDetailChart(stateName) {
+    const svgD = d3.select("#detailChart");
+    svgD.selectAll("*").remove();
+  
+    const data = Array.from(dataByKey.entries())
+      .map(([k, v]) => {
+        const [state, year, month, dn] = k.split("__");
+        if (state !== stateName || dn !== current.dn) return null;
+        return { year:+year, month:+month, count:+v.count };
+      })
+      .filter(Boolean)
+      .sort((a,b)=>a.year===b.year ? a.month-b.month : a.year-b.year);
+  
+    if (!data.length) {
+      d3.select("#detailTitle").text(`${stateName}: No data`);
+      return;
+    }
+  
+    const parseDate = d => new Date(d.year, d.month-1);
+    const x = d3.scaleTime()
+      .domain(d3.extent(data, d=>parseDate(d)))
+      .range([40,380]);
+    const y = d3.scaleLinear()
+      .domain([0, d3.max(data,d=>d.count)]).nice()
+      .range([220,20]);
+  
+    const line = d3.line()
+      .x(d=>x(parseDate(d)))
+      .y(d=>y(d.count));
+  
+    svgD.append("path")
+      .datum(data)
+      .attr("fill","none")
+      .attr("stroke","#ff7a18")
+      .attr("stroke-width",2)
+      .attr("d",line);
+  
+    svgD.append("g").attr("transform","translate(0,220)").call(d3.axisBottom(x).ticks(5));
+    svgD.append("g").attr("transform","translate(40,0)").call(d3.axisLeft(y).ticks(4));
+    d3.select("#detailTitle").text(`🔥 ${stateName} — Monthly Wildfires`);
+  }
+  
 
+  statePath.on("click", (ev, d) => drawDetailChart(getStateName(d)));
     // Initial draw
     update();
 
