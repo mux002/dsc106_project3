@@ -87,7 +87,7 @@ Promise.all([
   
 
   const initialTransform = d3.zoomIdentity
-    .translate(700, 250)
+    .translate(500, 250)
     .scale(1);
   svg.call(zoom.transform, initialTransform);
 
