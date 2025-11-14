@@ -43,6 +43,22 @@ h1{
   margin-top:6px;
 }
 
+#playBtn {
+  padding: 10px 20px;      /* bigger button */
+  font-size: 18px;         /* slightly larger text */
+  border-radius: 10px;     /* smoother corners */
+  font-weight: 600;        /* bold-ish */
+  display: inline-flex;
+  align-items: center;     /* vertically center icon */
+  gap: 6px;                /* spacing between icon + text (if you add text later) */
+}
+
+.note {
+  font-size: 15px;
+  color: var(--muted);
+  margin-left: 10px;
+  opacity: 0.85;
+}
 
 .controls-bar{
   display:flex;
@@ -180,6 +196,28 @@ svg{
   border-radius:6px;
   border:1px solid #d6dbe2;
 }
+.legend-note {
+  font-size: 12px;
+  color: var(--muted);
+  margin-bottom: 4px;
+}
+
+.frp-footnote {
+  margin-top: 6px;
+  font-size: 13px;
+  color: var(--muted);
+  background: rgba(255,255,255,0.85);
+  border: 1px solid var(--stroke);
+  padding: 8px 12px;
+  border-radius: 10px;
+  width: fit-content;
+  max-width: 300px;
+  backdrop-filter: blur(6px);
+}
+.frp-footnote strong {
+  color: var(--text);
+  font-weight: 600;
+}
 
 /* Detail Chart ---------------------------------- */
 #detailChart{
@@ -222,6 +260,9 @@ svg{
     <option value="median_frp">Median FRP</option>
   </select>
 
+  <button id="playBtn" class="chip">▶︎ Play</button>
+  <span id="playNote" class="note">Click Play to animate month-to-month changes</span>
+
 </div>
 
 <!-- 🔹 Main content: left map, right detail -->
@@ -231,9 +272,16 @@ svg{
     <div class="svg-wrap">
         <svg id="map" role="img" aria-label="US wildfire heat map"></svg>
         <div class="legend">
-            <span id="legendMin">low</span>
+            <!-- <span id="legendMin">low</span>
             <div class="bar" id="legendBar"></div>
-            <span id="legendMax">high</span>
+            <span id="legendMax">high</span> -->
+            <div id="frpNote" class="legend-note" style="display:none;">
+            FRP = Fire Radiative Power (fire intensity)
+          </div>
+
+          <span id="legendMin">low</span>
+          <div class="bar" id="legendBar"></div>
+          <span id="legendMax">high</span>
           </div>
       </div>
   </section>
@@ -248,6 +296,8 @@ svg{
 </div>
 
 <div class="tooltip" id="tooltip"></div>
+
+
 
 <script src="https://d3js.org/d3.v7.min.js"></script>
 <script src="app.js"></script>
