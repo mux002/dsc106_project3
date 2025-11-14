@@ -227,6 +227,29 @@ svg{
   border-radius:12px;
   border:1px solid var(--stroke);
 }
+
+/* Writeup ---------------------------------- */
+.writeup {
+  margin: 40px auto 80px;
+  max-width: 900px;
+  padding: 0 24px 40px;
+  color: var(--text);
+  line-height: 1.6;
+}
+
+.writeup h2 {
+  margin-top: 32px;
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.writeup p {
+  margin-top: 12px;
+  color: var(--muted);
+  font-size: 16px;
+}
+
 </style>
 </head>
 
@@ -297,7 +320,19 @@ svg{
 
 <div class="tooltip" id="tooltip"></div>
 
+<section class="writeup">
+  <h2>Rationale for Design Decisions</h2>
+  <p>We selected a choropleth map because the central question of this project is “Where in the U.S. are wildfires most active, and how does this change over time?” A choropleth directly encodes wildfire intensity at the state level, making geographic patterns immediately recognizable. Before finalizing this choice, we explored several alternatives, including point-level scatter maps (plotting individual fire detections), heatmaps using latitude–longitude grids, and state-based bar charts. However, these designs introduced challenges. Scatter maps became visually noisy due to heavy point overlap, heatmaps blurred state-level boundaries and made comparisons difficult, and bar charts removed geographic context altogether. Compared to these options, the choropleth strikes the best balance between clarity, spatial insight, and interpretability. When combined with interactive filters for month, year, and day/night modes, it keeps the focus on spatial dynamics while clearly conveying quantitative differences across states.</p>
+  <p>For visual encoding, we applied a Yellow–Orange–Red (YlOrRd) sequential color palette, which intuitively conveys fire intensity and aligns with established hazard visualization conventions. We tested Cividis and Turbo, but found YlOrRd offered clearer interpretability for general audiences. </p>
+  <p>To support exploration of spatial and temporal patterns, we incorporated several interactive components. A year dropdown and month slider reveal temporal trends over multiple fire seasons, while day/night toggles and a metric selector allow users to filter the data by satellite mode and different state-level summaries. Hover tooltips present detailed statistics without cluttering the map, and zoom/pan enable close inspection of specific regions. We also added a Play/Pause animation that automatically cycles through months, making seasonal wildfire patterns immediately visible. Finally, we placed all controls at the top to maximize available map space, and positioned the color legend in the bottom-right to avoid covering states and to follow common cartographic conventions.
+</p>
 
+  <h2>Overview of the Development Process</h2>
+  <p>Our team divided the work across several core components of the visualization. One member focused on data preparation using Python, cleaning the raw wildfire detections and aggregating them into monthly state-level metrics. Another member concentrated on the map construction and D3 implementation, including loading GeoJSON boundaries, fitting the Albers USA projection, and rendering the interactive choropleth. In parallel, we developed the UI and interaction layer—such as the year dropdown, month slider, day/night toggle, and metric selector—while also designing the tooltip and color legend to ensure clear, on-demand detail without overwhelming the interface. We additionally implemented the Play/Pause animation to support temporal exploration, and another member refined the styling, layout, and overall visual theme to create a cohesive and accessible user experience.</p>
+<p>Throughout development, each team member independently explored potential features to enhance the visualization, alternative encodings, new metrics, or interaction modes, and we shared our findings and discussed which features best complemented the heatmap. Finally, all members contributed to testing, debugging, and documentation, ensuring the final product was both functional and visually consistent.</p>
+<p>In total, development took about 25–30 people-hours. Approximately 5 hours were spent on data preparation, 6 hours on D3 mapping and interaction logic, 4 hours on styling and layout, 3 hours debugging projection and resize issues, 2 hours on tooltips and legend formatting, 2 hours on animation features, and 2–3 hours on polishing documentation and usability.</p>
+<p>The most time-consuming challenge was debugging map projection and responsive resizing, which required fine-tuning to maintain alignment across different screen sizes. We also spent effort ensuring all interface controls updated consistently through a single update() function to simplify maintenance. Additionally, we used quantile color scaling to balance detection counts between large and small states, preventing visual dominance by California and Alaska. The animation feature proved especially valuable, revealing seasonal wildfire trends and enhancing the overall interpretability of the visualization.</p>
+</section>
 
 <script src="https://d3js.org/d3.v7.min.js"></script>
 <script src="app.js"></script>
