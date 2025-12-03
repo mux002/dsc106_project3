@@ -83,18 +83,18 @@ Promise.all([
   
 
   const initialTransform = d3.zoomIdentity
-    .translate(450, 250)
-    .scale(0.95);
+    .translate(50, 0)
+    .scale(0.9);
   svg.call(zoom.transform, initialTransform);
 
-  // -------- 季节性图表函数 ----------
+  
   function drawSeasonalChart() {
     const seasonalSvg = d3.select("#seasonalChart");
     if (seasonalSvg.empty()) return;
     
     seasonalSvg.selectAll("*").remove();
     
-    // 获取容器实际尺寸
+   
     const containerWidth = seasonalSvg.node().getBoundingClientRect().width;
     if (containerWidth === 0) return;
     
@@ -105,7 +105,7 @@ Promise.all([
     const g = seasonalSvg.append("g")
         .attr("transform", `translate(${margin.left},${margin.top})`);
     
-    // 计算所有年份每个月的平均检测数
+    
     const monthlyData = [];
     for (let month = 1; month <= 12; month++) {
       let total = 0;
@@ -129,7 +129,6 @@ Promise.all([
       });
     }
     
-    // 检查数据是否有效
     const maxCount = d3.max(monthlyData, d => d.avgCount);
     if (maxCount <= 0) {
       g.append("text")
@@ -150,7 +149,7 @@ Promise.all([
         .domain([0, maxCount * 1.1])
         .range([height, 0]);
     
-    // 绘制条形
+   
     g.selectAll(".month-bar")
         .data(monthlyData)
         .join("rect")
@@ -169,7 +168,7 @@ Promise.all([
         .attr("rx", 2)
         .attr("ry", 2);
     
-    // 添加连线展示"wave"形状
+   
     const line = d3.line()
         .x(d => x(d.month) + x.bandwidth() / 2)
         .y(d => y(d.avgCount))
@@ -182,13 +181,13 @@ Promise.all([
         .attr("stroke-width", 2)
         .attr("d", line);
     
-    // X轴
+
     g.append("g")
         .attr("transform", `translate(0,${height})`)
         .call(d3.axisBottom(x).tickValues([1,4,7,10]).tickFormat(d => monthNames[d]))
         .attr("font-size", "11px");
     
-    // 添加当前月份指示器
+    
     const currentMonthX = x(current.month) + x.bandwidth() / 2;
     g.append("circle")
         .attr("cx", currentMonthX)
@@ -198,7 +197,7 @@ Promise.all([
         .attr("stroke", "#ff4444")
         .attr("stroke-width", 2);
     
-    // 添加说明文本
+
     const peakMonth = monthlyData.reduce((a, b) => a.avgCount > b.avgCount ? a : b, monthlyData[0]);
     if (peakMonth && peakMonth.avgCount > 0) {
       g.append("text")
@@ -255,7 +254,7 @@ Promise.all([
 
     d3.select("#detailTitle").text(`${stateName} — Monthly Wildfires`);
     
-    // 绘制季节性图表（点击州时也更新）
+  
     drawSeasonalChart();
   }
 
@@ -332,7 +331,7 @@ Promise.all([
         drawDetailChart(stateName);
       });
 
-    // 绘制季节性图表
+  
     drawSeasonalChart();
   }
 
