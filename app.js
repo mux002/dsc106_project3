@@ -25,10 +25,9 @@ const legendMin   = document.getElementById("legendMin");
 const legendMax   = document.getElementById("legendMax");
 const playBtn     = document.getElementById("playBtn");   
 const frpNote   = document.getElementById("frpNote");
-const frpFootnote = document.getElementById("frpFootnote");
 
 const monthNames = ["","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
-const projection = d3.geoAlbersUsa().scale(1100).translate([width/2, height/2 + 30]);
+const projection = d3.geoAlbersUsa().scale(1000).translate([width/2, height/2 + 30]);
 const path = d3.geoPath().projection(projection);
 
 const color = d3.scaleSequential(d3.interpolateYlOrRd);
@@ -88,41 +87,58 @@ Promise.all([
     .scale(0.95);
   svg.call(zoom.transform, initialTransform);
 
-  // -------- 新增：季节性图表函数 ----------
+  // -------- 季节性图表函数 ----------
   function drawSeasonalChart() {
-    const svg = d3.select("#seasonalChart");
-    if (svg.empty()) return; // 确保元素存在
+    const seasonalSvg = d3.select("#seasonalChart");
+    if (seasonalSvg.empty()) return;
     
-    svg.selectAll("*").remove();
+    seasonalSvg.selectAll("*").remove();
     
-    const margin = {top: 20, right: 20, bottom: 25, left: 40};
-    const width = 600 - margin.left - margin.right;
+    // 获取容器实际尺寸
+    const containerWidth = seasonalSvg.node().getBoundingClientRect().width;
+    if (containerWidth === 0) return;
+    
+    const margin = {top: 15, right: 20, bottom: 25, left: 40};
+    const width = containerWidth - margin.left - margin.right;
     const height = 100 - margin.top - margin.bottom;
     
-    const g = svg.append("g")
+    const g = seasonalSvg.append("g")
         .attr("transform", `translate(${margin.left},${margin.top})`);
     
     // 计算所有年份每个月的平均检测数
     const monthlyData = [];
     for (let month = 1; month <= 12; month++) {
-        let total = 0;
-        let count = 0;
-        
-        statesFeat.forEach(f => {
-            years.forEach(year => {
-                const row = dataByKey.get(key(getStateName(f), year, month, "A"));
-                if (row && row.count) {
-                    total += row.count;
-                    count++;
-                }
-            });
+      let total = 0;
+      let count = 0;
+      
+      statesFeat.forEach(f => {
+        years.forEach(year => {
+          const row = dataByKey.get(key(getStateName(f), year, month, "A"));
+          if (row && row.count !== undefined && row.count !== null) {
+            total += row.count;
+            count++;
+          }
         });
-        
-        monthlyData.push({
-            month,
-            name: monthNames[month],
-            avgCount: count > 0 ? total / count : 0
-        });
+      });
+      
+      const avgCount = count > 0 ? total / count : 0;
+      monthlyData.push({
+        month,
+        name: monthNames[month],
+        avgCount: avgCount
+      });
+    }
+    
+    // 检查数据是否有效
+    const maxCount = d3.max(monthlyData, d => d.avgCount);
+    if (maxCount <= 0) {
+      g.append("text")
+        .attr("x", width/2)
+        .attr("y", height/2)
+        .attr("text-anchor", "middle")
+        .attr("fill", "#999")
+        .text("No seasonal data available");
+      return;
     }
     
     const x = d3.scaleBand()
@@ -131,7 +147,7 @@ Promise.all([
         .padding(0.2);
     
     const y = d3.scaleLinear()
-        .domain([0, d3.max(monthlyData, d => d.avgCount)])
+        .domain([0, maxCount * 1.1])
         .range([height, 0]);
     
     // 绘制条形
@@ -144,13 +160,14 @@ Promise.all([
         .attr("width", x.bandwidth())
         .attr("height", d => height - y(d.avgCount))
         .attr("fill", d => {
-            // 根据月份设置颜色渐变
-            if (d.month <= 2) return "#4a6fa5"; // 冬季蓝色
-            if (d.month <= 5) return "#ffaa33"; // 春季黄色
-            if (d.month <= 8) return "#ff4444"; // 夏季红色
-            return "#dd7733"; // 秋季橙色
+            if (d.month <= 2) return "#4a6fa5";
+            if (d.month <= 5) return "#ffaa33";
+            if (d.month <= 8) return "#ff4444";
+            return "#dd7733";
         })
-        .attr("opacity", d => d.month === current.month ? 1 : 0.6);
+        .attr("opacity", d => d.month === current.month ? 1 : 0.6)
+        .attr("rx", 2)
+        .attr("ry", 2);
     
     // 添加连线展示"wave"形状
     const line = d3.line()
@@ -182,15 +199,16 @@ Promise.all([
         .attr("stroke-width", 2);
     
     // 添加说明文本
-    const peakMonth = monthlyData.reduce((a, b) => a.avgCount > b.avgCount ? a : b);
-    if (peakMonth) {
-        g.append("text")
-            .attr("x", x(peakMonth.month) + x.bandwidth() / 2)
-            .attr("y", y(peakMonth.avgCount) - 8)
-            .attr("text-anchor", "middle")
-            .attr("font-size", "11px")
-            .attr("fill", "#ff4444")
-            .text("Peak");
+    const peakMonth = monthlyData.reduce((a, b) => a.avgCount > b.avgCount ? a : b, monthlyData[0]);
+    if (peakMonth && peakMonth.avgCount > 0) {
+      g.append("text")
+          .attr("x", x(peakMonth.month) + x.bandwidth() / 2)
+          .attr("y", y(peakMonth.avgCount) - 12)
+          .attr("text-anchor", "middle")
+          .attr("font-size", "10px")
+          .attr("font-weight", "bold")
+          .attr("fill", "#ff4444")
+          .text("Peak");
     }
   }
 
@@ -236,6 +254,9 @@ Promise.all([
     svgD.append("g").attr("transform","translate(40,0)").call(d3.axisLeft(y).ticks(4));
 
     d3.select("#detailTitle").text(`${stateName} — Monthly Wildfires`);
+    
+    // 绘制季节性图表（点击州时也更新）
+    drawSeasonalChart();
   }
 
   // -------- Map update function ----------
@@ -311,7 +332,7 @@ Promise.all([
         drawDetailChart(stateName);
       });
 
-  
+    // 绘制季节性图表
     drawSeasonalChart();
   }
 
@@ -367,7 +388,6 @@ Promise.all([
   }
 
 }).catch(err => {
-  console.error(err);
+  console.error("Failed to load data:", err);
   alert("Failed to load data or map — open the console for details.");
 });
-

@@ -174,27 +174,7 @@ svg {
   margin-bottom:4px;
 }
 
-/* Seasonal Wave */
-.seasonal-wave {
-  position:absolute;
-  bottom:80px;
-  left:20px;
-  right:20px;
-  background:rgba(255,255,255,0.95);
-  padding:12px 16px;
-  border-radius:12px;
-  border:1px solid var(--stroke);
-  backdrop-filter:blur(8px);
-  box-shadow:0 4px 12px rgba(0,0,0,0.1);
-  z-index:5;
-}
-.seasonal-wave h3 {
-  margin:0 0 10px 0;
-  font-size:14px;
-  font-weight:600;
-  color:var(--text);
-}
-#seasonalChart { width:100%; height:120px; }
+
 
 /* Detail Chart */
 #detailChart {
@@ -203,6 +183,27 @@ svg {
   background:#fff;
   border-radius:12px;
   border:1px solid var(--stroke);
+}
+
+.seasonal-wave {
+  background: var(--panel);
+  padding: 12px 16px;
+  border-radius: 12px;
+  border: 1px solid var(--stroke);
+  margin-top: 20px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.seasonal-wave h3 {
+  margin: 0 0 10px 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+#seasonalChart { 
+  width: 100%; 
+  height: 120px; 
 }
 
 /* Writeup */
@@ -265,13 +266,6 @@ svg {
         <div class="bar" id="legendBar"></div>
         <span id="legendMax">high</span>
       </div>
-      <div class="seasonal-wave">
-        <h3>Wildfire Seasonality Wave (2000–2025)</h3>
-        <svg id="seasonalChart"></svg>
-        <div style="display:flex;justify-content:space-between;font-size:12px;margin-top:8px;color:var(--muted);">
-          <span>Winter</span><span>Spring</span><span>Summer</span><span>Fall</span>
-        </div>
-      </div>
     </div>
   </section>
 
@@ -279,6 +273,14 @@ svg {
     <h2 id="detailTitle">State Detail</h2>
     <svg id="detailChart"></svg>
     <p class="sub" style="text-align:center;">Click a state to see monthly wildfire counts.</p>
+    
+    <div class="seasonal-wave" style="margin-top: 20px; position: relative; left: 0; right: 0; bottom: 0;">
+      <h3>Wildfire Seasonality Wave (2000–2025)</h3>
+      <svg id="seasonalChart"></svg>
+      <div style="display:flex;justify-content:space-between;font-size:12px;margin-top:8px;color:var(--muted);">
+        <span>Winter</span><span>Spring</span><span>Summer</span><span>Fall</span>
+      </div>
+    </div>
   </aside>
 </div>
 
