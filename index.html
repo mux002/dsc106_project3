@@ -6,76 +6,55 @@
 <title>🔥 When and Where America Burns: Exploring U.S. Wildfires (2000–2025)</title>
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 <style>
-:root{
-  /* Light theme color system --------------------- */
-  --bg:#fafbfc;             
-  --panel:#ffffff;          
-  --text:#1e2430;        
-  --muted:#6c7a89;      
-  --stroke:#d8dce1;         
-  --accent:#ff7a18;           
-  --accent-soft:#ff7a1830;   
+:root {
+  --bg:#fafbfc;
+  --panel:#ffffff;
+  --text:#1e2430;
+  --muted:#6c7a89;
+  --stroke:#d8dce1;
+  --accent:#ff7a18;
+  --accent-soft:#ff7a1830;
 }
-
-body{
+body {
   margin:0;
   font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
   background:var(--bg);
   color:var(--text);
 }
-
-
-header{
+header {
   padding:20px 32px;
   border-bottom:1px solid var(--stroke);
   background:linear-gradient(180deg,#ffffff,#f4f5f7);
   box-shadow:0 3px 10px rgba(0,0,0,0.05);
 }
-h1{
+h1 {
   margin:0;
   font-size:38px;
   font-weight:700;
   letter-spacing:0.3px;
 }
-.sub{
+.sub {
   color:var(--muted);
   font-size:15px;
   margin-top:6px;
 }
 
-#playBtn {
-  padding: 10px 20px;      /* bigger button */
-  font-size: 18px;         /* slightly larger text */
-  border-radius: 10px;     /* smoother corners */
-  font-weight: 600;        /* bold-ish */
-  display: inline-flex;
-  align-items: center;     /* vertically center icon */
-  gap: 6px;                /* spacing between icon + text (if you add text later) */
-}
-
-.note {
-  font-size: 15px;
-  color: var(--muted);
-  margin-left: 10px;
-  opacity: 0.85;
-}
-
-.controls-bar{
+/* Control bar */
+.controls-bar {
   display:flex;
   flex-wrap:wrap;
   align-items:center;
   gap:22px;
   padding:14px 28px;
-  background:#ffffff;
+  background:#fff;
   border-bottom:1px solid var(--stroke);
 }
-.controls-bar label{
+.controls-bar label {
   font-size:17px;
   color:var(--muted);
 }
-
 .controls-bar select,
-.controls-bar input[type="range"]{
+.controls-bar input[type="range"] {
   background:#ffffff;
   color:var(--text);
   border:1px solid #c6ccd4;
@@ -85,18 +64,13 @@ h1{
   transition:0.15s;
 }
 .controls-bar select:focus,
-.controls-bar input[type="range"]:focus{
+.controls-bar input[type="range"]:focus {
   outline:none;
   border-color:var(--accent);
   box-shadow:0 0 6px var(--accent-soft);
 }
-
-/* Day/Night toggle ----------------------------- */
-.toggle-group{
-  display:flex;
-  gap:6px;
-}
-.toggle-group button{
+.toggle-group { display:flex; gap:6px; }
+.toggle-group button {
   padding:6px 12px;
   font-size:17px;
   border-radius:8px;
@@ -106,57 +80,55 @@ h1{
   cursor:pointer;
   transition:0.15s;
 }
-.toggle-group button:hover{
-  border-color:var(--accent);
-}
-.toggle-group button.active{
+.toggle-group button:hover { border-color:var(--accent); }
+.toggle-group button.active {
   border-color:var(--accent);
   background:#fff4eb;
 }
+#playBtn {
+  padding:8px 18px;
+  font-size:17px;
+  border-radius:10px;
+  background:var(--accent);
+  color:#fff;
+  font-weight:600;
+  border:none;
+  cursor:pointer;
+}
+#playBtn:hover { opacity:0.9; }
 
-
-.main{
+/* Layout */
+.main {
   display:grid;
   grid-template-columns:1fr 420px;
   gap:20px;
   padding:24px;
 }
-
-.panel{
+.panel {
   background:var(--panel);
   border:1px solid var(--stroke);
   border-radius:16px;
   padding:18px;
-  box-shadow:
-    0 4px 14px rgba(0,0,0,.05),
-    inset 0 0 0 1px rgba(255,255,255,0.5);
+  box-shadow:0 4px 14px rgba(0,0,0,.05);
 }
-.panel h2{
-  margin:0 0 12px 0;
-  font-size:20px;
-  font-weight:600;
-}
-
-
-.svg-wrap{
-  background:#ffffff;
+.svg-wrap {
+  background:#fff;
   border:1px solid var(--stroke);
   border-radius:16px;
   overflow:hidden;
   position:relative;
   box-shadow:0 6px 14px rgba(0,0,0,.07);
 }
-
-svg{
+svg {
   width:100%;
   height:600px;
 }
 
-/* Tooltip -------------------------------------- */
-.tooltip{
+/* Tooltip */
+.tooltip {
   position:fixed;
   pointer-events:none;
-  background:#ffffff;
+  background:#fff;
   border:1px solid #cfd5dd;
   padding:10px 14px;
   border-radius:12px;
@@ -167,21 +139,21 @@ svg{
   z-index:10;
   max-width:320px;
 }
-.tooltip .h{
+.tooltip .h {
   font-weight:700;
   margin-bottom:6px;
   font-size:15px;
 }
 
-/* Legend ---------------------------------------- */
-.legend{
+/* Legend */
+.legend {
   position:absolute;
   right:20px;
   bottom:20px;
   background:rgba(255,255,255,0.9);
   padding:8px 14px;
   border-radius:12px;
-  border:1px solid #d6dbe2;
+  border:1px solid var(--stroke);
   display:flex;
   align-items:center;
   gap:10px;
@@ -190,66 +162,68 @@ svg{
   backdrop-filter:blur(8px);
   box-shadow:0 4px 12px rgba(0,0,0,.15);
 }
-.legend .bar{
+.legend .bar {
   height:12px;
   width:140px;
   border-radius:6px;
   border:1px solid #d6dbe2;
 }
 .legend-note {
-  font-size: 12px;
-  color: var(--muted);
-  margin-bottom: 4px;
+  font-size:12px;
+  color:var(--muted);
+  margin-bottom:4px;
 }
 
-.frp-footnote {
-  margin-top: 6px;
-  font-size: 13px;
-  color: var(--muted);
-  background: rgba(255,255,255,0.85);
-  border: 1px solid var(--stroke);
-  padding: 8px 12px;
-  border-radius: 10px;
-  width: fit-content;
-  max-width: 300px;
-  backdrop-filter: blur(6px);
+/* Seasonal Wave */
+.seasonal-wave {
+  position:absolute;
+  bottom:80px;
+  left:20px;
+  right:20px;
+  background:rgba(255,255,255,0.95);
+  padding:12px 16px;
+  border-radius:12px;
+  border:1px solid var(--stroke);
+  backdrop-filter:blur(8px);
+  box-shadow:0 4px 12px rgba(0,0,0,0.1);
+  z-index:5;
 }
-.frp-footnote strong {
-  color: var(--text);
-  font-weight: 600;
+.seasonal-wave h3 {
+  margin:0 0 10px 0;
+  font-size:14px;
+  font-weight:600;
+  color:var(--text);
 }
+#seasonalChart { width:100%; height:120px; }
 
-/* Detail Chart ---------------------------------- */
-#detailChart{
+/* Detail Chart */
+#detailChart {
   width:100%;
   height:260px;
-  background:#ffffff;
+  background:#fff;
   border-radius:12px;
   border:1px solid var(--stroke);
 }
 
-/* Writeup ---------------------------------- */
+/* Writeup */
 .writeup {
-  margin: 40px auto 80px;
-  max-width: 900px;
-  padding: 0 24px 40px;
-  color: var(--text);
-  line-height: 1.6;
+  margin:40px auto 80px;
+  max-width:900px;
+  padding:0 24px 40px;
+  color:var(--text);
+  line-height:1.6;
 }
-
 .writeup h2 {
-  margin-top: 32px;
-  font-size: 24px;
-  font-weight: 700;
-  color: var(--text);
+  margin-top:32px;
+  font-size:24px;
+  font-weight:700;
+  color:var(--text);
 }
-
 .writeup p {
-  margin-top: 12px;
-  color: var(--muted);
-  font-size: 16px;
+  margin-top:12px;
+  color:var(--muted);
+  font-size:16px;
 }
-
 </style>
 </head>
 
@@ -259,71 +233,60 @@ svg{
   <div class="sub">Interactive map of U.S. wildfires with seasonal and intensity patterns (2000–2025)</div>
 </header>
 
-<!-- 🔹 Top Controls Bar -->
 <div class="controls-bar">
-  
   <label for="year">Year: <span id="yearLabel"></span></label>
   <select id="year"></select>
-
   <label for="month">Month:</label>
   <input id="month" type="range" min="1" max="12" step="1" value="7"/>
   <span id="monthLabel">Jul</span>
-
-  <label>Day / Night:</label>
+  <label>Day/Night:</label>
   <div class="toggle-group" id="dnGroup">
     <button data-dn="A" class="active">All</button>
     <button data-dn="D">Day</button>
     <button data-dn="N">Night</button>
   </div>
-
   <label for="metric">Metric:</label>
   <select id="metric">
     <option value="count">Detections</option>
     <option value="avg_brightness">Avg Brightness</option>
     <option value="median_frp">Median FRP</option>
   </select>
-
-  <button id="playBtn" class="chip">▶︎ Play</button>
-  <span id="playNote" class="note">Click Play to animate month-to-month changes</span>
-
+  <button id="playBtn">▶ Play</button>
 </div>
 
-<!-- 🔹 Main content: left map, right detail -->
 <div class="main">
   <section class="panel">
     <h2>Map</h2>
     <div class="svg-wrap">
-        <svg id="map" role="img" aria-label="US wildfire heat map"></svg>
-        <div class="legend">
-            <!-- <span id="legendMin">low</span>
-            <div class="bar" id="legendBar"></div>
-            <span id="legendMax">high</span> -->
-            <div id="frpNote" class="legend-note" style="display:none;">
-            FRP = Fire Radiative Power (fire intensity)
-          </div>
-
-          <span id="legendMin">low</span>
-          <div class="bar" id="legendBar"></div>
-          <span id="legendMax">high</span>
-          </div>
+      <svg id="map" width="960" height="600" role="img" aria-label="US wildfire heat map"></svg>
+      <div class="legend">
+        <div id="frpNote" class="legend-note" style="display:none;">FRP = Fire Radiative Power</div>
+        <span id="legendMin">low</span>
+        <div class="bar" id="legendBar"></div>
+        <span id="legendMax">high</span>
       </div>
+      <div class="seasonal-wave">
+        <h3>Wildfire Seasonality Wave (2000–2025)</h3>
+        <svg id="seasonalChart"></svg>
+        <div style="display:flex;justify-content:space-between;font-size:12px;margin-top:8px;color:var(--muted);">
+          <span>Winter</span><span>Spring</span><span>Summer</span><span>Fall</span>
+        </div>
+      </div>
+    </div>
   </section>
 
   <aside class="panel" id="detailPanel">
     <h2 id="detailTitle">State Detail</h2>
     <svg id="detailChart"></svg>
-    <p class="sub" style="font: size 15px; text-align:center;">
-      Click a state on the map to see monthly wildfire counts over time.
-    </p>
+    <p class="sub" style="text-align:center;">Click a state to see monthly wildfire counts.</p>
   </aside>
 </div>
 
 <div class="tooltip" id="tooltip"></div>
 
 <section class="writeup">
-  <h2>Initial Prototype Writeup</h2>
-  <p>So far, we’ve cleaned and combined the MODIS fire detection data and aggregated it into monthly, state-level summaries that will feed our visualizations. We’ve implemented the main choropleth map in D3 with an Albers USA projection, plus interactions like year and month controls, day/night filters, and a metric selector so users can slice the data in different ways. The page also includes hover tooltips, a color legend, and a Play/Pause animation that cycles through months to highlight seasonal patterns, as well as a linked state-detail panel that shows monthly wildfire counts over time when a state is clicked. We have also begun experimenting with different color scales, annotation styles, and layout variations in preparation for transforming the visualization into a full explorable explanation rather than just an interactive dashboard. Before building the interactive map, we also generated several exploratory graphs in Python (monthly trends, brightness vs. FRP, day vs. night boxplots) to understand which patterns would be most meaningful to highlight in the final visualization. Finally, we’ve written up our initial design rationale and development process, and spent time debugging projection/resizing issues and making the layout and styling cohesive and easy to read.</p>
-  <p>The most challenging part of our project to design will be the overall interaction flow that ties the choropleth map, time controls, metric selector, and state detail view into one coherent story about where and when U.S. wildfires occur. Because we are using many features, the hard part is deciding which elements to foreground and how to arrange them so that users are not overwhelmed. We need the map, legend, and state-level time-series panel to work together so users can move smoothly from the big national picture to specific questions about a single state or season. Getting this balance right will require iterating on layout, color scaling, and default settings so the variety of features collectively conveys a clear answer to our central question rather than feeling like separate widgets. Another challenge will be shifting from a tool-based interface to a guided explanatory format: we need to structure the page so that interactions support the narrative rather than distract from it. We also want the final design to feel more like an explorable narrative rather than a dashboard, so choosing a few key insights to guide the viewer will require deliberate design decisions. Deciding how to integrate annotations, scrollytelling sections, or preset views will require additional design exploration to ensure the final explorable explanation communicates insights effectively to users with different levels of experience.</p>
+  <h2>Prototype Summary</h2>
+  <p>This version fixes projection scaling, legend consistency, tooltip stability, and introduces a cleaner seasonal pattern chart. It ensures responsive map sizing and smoother state detail transitions.</p>
 </section>
 
 <script src="https://d3js.org/d3.v7.min.js"></script>
