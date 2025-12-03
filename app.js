@@ -62,13 +62,22 @@ Promise.all([
     dataByKey.set(key(norm(r.state), +r.year, +r.month, dn), r);
   });
 
+ 
   // Populate years
   years = Array.from(new Set(rows.map(d => +d.year))).sort(d3.ascending);
-  current.year = years[years.length - 1];
+
+  const preferredYear = 2024;
+  current.year = years.includes(preferredYear) ? preferredYear : years[years.length - 1];
+
+  // Default month to January
+  current.month = 1;
+  monthInput.value = 1;
+
   yearLabel.textContent = current.year;
   yearSelect.innerHTML = years
-    .map(y => `<option value="${y}" ${y===current.year?'selected':''}>${y}</option>`)
+    .map(y => `<option value="${y}" ${y === current.year ? 'selected' : ''}>${y}</option>`)
     .join("");
+
 
   // Draw state paths
   statePath = g.append("g")
