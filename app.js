@@ -37,7 +37,7 @@ let dataByKey = new Map();
 let years = [];
 let statesFeat = [];
 let statePath;                           // will hold the map paths
-let current = { year: 2024, month: 1, dn: "A", metric: metricSelect.value };
+let current = { year: null, month: +monthInput.value, dn: "A", metric: metricSelect.value };
 
 // Play / pause timer
 let monthTimer = null;
